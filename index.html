@@ -4,19 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Northset | Fractional CMO & AI Marketing for Austin</title>
+    <title>Northset - Fractional CMO & AI Marketing Strategy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'DM Sans', sans-serif; background: #FFFFFF; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
 ```
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: #ffffff;
+        color: #2d3748;
+        line-height: 1.6;
+    }
+
+    /* Color variables */
     :root {
         --heroNavy: #0F1B2D;
         --deepNavy: #1B2A4A;
         --charcoal: #2D3748;
         --amber: #D4870E;
+        --amberHover: #B8740C;
+        --amberLight: rgba(212,135,14,0.12);
         --white: #FFFFFF;
         --offWhite: #F7F5F2;
         --lightGray: #E8E6E3;
@@ -24,13 +42,14 @@
         --textMedium: #64748B;
     }
 
-    /* HERO */
+    /* Hero Section */
     .hero {
-        background: linear-gradient(165deg, var(--heroNavy) 0%, var(--deepNavy) 100%);
+        background: linear-gradient(165deg, var(--heroNavy) 0%, #1a2f48 100%);
+        color: var(--white);
+        padding: 120px 40px 80px;
         min-height: 100vh;
         display: flex;
         align-items: center;
-        padding: 120px clamp(20px, 5vw, 60px) 80px;
         position: relative;
         overflow: hidden;
     }
@@ -38,30 +57,67 @@
     .hero::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        opacity: 0.3;
-        background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.5) 1px, transparent 1px);
-        background-size: 40px 40px;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.03;
+        backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.5) 1px, transparent 1px)';
+        backgroundSize: '40px 40px';
         pointer-events: none;
+    }
+
+    .hero::after {
+        content: '';
+        position: absolute;
+        top: 15%;
+        right: 8%;
+        width: 420px;
+        height: 420px;
+        background: radial-gradient(circle, rgba(212,135,14,0.08) 0%, transparent 70%);
+        border-radius: 50%;
+        filter: blur(40px);
     }
 
     .hero-content {
         max-width: 1200px;
-        margin: 0 auto;
         width: 100%;
+        margin: 0 auto;
         position: relative;
-        z-index: 1;
+        z-index: 2;
     }
 
+    .hero h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(38px, 5.5vw, 72px);
+        font-weight: 700;
+        line-height: 1.1;
+        margin: 16px 0 24px;
+        letter-spacing: -0.02em;
+        max-width: 720px;
+    }
+
+    .hero h1 span {
+        color: var(--amber);
+    }
+
+    .hero p {
+        font-size: clamp(17px, 2vw, 20px);
+        line-height: 1.7;
+        max-width: 540px;
+        margin-bottom: 36px;
+        color: rgba(255,255,255,0.85);
+    }
+
+    /* Navigation */
     nav {
         position: fixed;
-        top: 0; left: 0; right: 0;
+        top: 0;
+        left: 0;
+        right: 0;
         z-index: 1000;
-        padding: 0 clamp(20px, 5vw, 60px);
-        height: 76px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        padding: 20px 40px;
+        background: transparent;
         transition: all 0.35s ease;
     }
 
@@ -69,95 +125,108 @@
         background: rgba(15,27,45,0.95);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid rgba(255,255,255,0.06);
+        padding: 16px 40px;
+    }
+
+    .nav-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 76px;
+    }
+
+    .nav-container.scrolled {
         height: 64px;
     }
 
-    .nav-logo {
+    .logo {
         display: flex;
         align-items: center;
         gap: 10px;
         cursor: pointer;
         color: var(--white);
+    }
+
+    .logo-text {
         font-family: 'Playfair Display', serif;
         font-size: 22px;
         font-weight: 700;
+        letter-spacing: -0.01em;
     }
 
     .nav-links {
         display: flex;
         gap: 28px;
+        align-items: center;
     }
 
-    .nav-links span {
+    .nav-links a {
+        font-family: 'DM Sans', sans-serif;
         font-size: 14px;
         font-weight: 500;
-        color: var(--white);
+        color: rgba(255,255,255,0.7);
+        text-decoration: none;
         cursor: pointer;
         transition: color 0.2s;
+        letter-spacing: 0.01em;
     }
 
-    .nav-links span:hover {
+    .nav-links a:hover {
         color: var(--amber);
     }
 
-    button {
+    /* Buttons */
+    .btn {
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        padding: 12px 24px;
         border: none;
         cursor: pointer;
         font-family: 'DM Sans', sans-serif;
         font-weight: 600;
+        font-size: 14px;
         letter-spacing: 0.02em;
         border-radius: 6px;
         transition: all 0.25s ease;
-        padding: 12px 24px;
-        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .btn-primary {
         background: var(--amber);
         color: var(--white);
-        box-shadow: 0 4px 12px rgba(212,135,14,0.2);
+        box-shadow: 0 4px 12px rgba(212,135,14,0.25);
     }
 
-    button:hover {
-        background: #B8740C;
+    .btn-primary:hover {
+        background: var(--amberHover);
         box-shadow: 0 8px 24px rgba(212,135,14,0.35);
+        transform: translateY(-2px);
     }
 
-    h1 {
-        font-family: 'Playfair Display', serif;
-        font-size: clamp(38px, 5.5vw, 64px);
-        font-weight: 700;
+    .btn-outline {
+        background: transparent;
         color: var(--white);
-        line-height: 1.1;
-        margin: 16px 0 24px;
+        border: 1.5px solid rgba(255,255,255,0.3);
     }
 
-    h2 {
-        font-family: 'Playfair Display', serif;
-        font-size: clamp(28px, 3.5vw, 44px);
-        font-weight: 700;
-        color: var(--deepNavy);
-        line-height: 1.2;
-        margin-top: 8px;
+    .btn-outline:hover {
+        border-color: var(--amber);
+        color: var(--amber);
     }
 
-    h3 {
-        font-family: 'Playfair Display', serif;
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--deepNavy);
-        margin-bottom: 8px;
+    /* Section Styles */
+    section {
+        padding: 96px 40px;
     }
 
-    p {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 15px;
-        color: var(--textMedium);
-        line-height: 1.6;
+    section.hero {
+        padding: 120px 40px 80px;
     }
 
-    .section {
-        padding: 96px clamp(20px, 5vw, 60px);
+    .section-container {
         max-width: 1200px;
         margin: 0 auto;
     }
@@ -166,6 +235,7 @@
         display: inline-flex;
         align-items: center;
         gap: 8px;
+        font-family: 'DM Sans', sans-serif;
         font-size: 12px;
         font-weight: 700;
         letter-spacing: 0.15em;
@@ -182,285 +252,452 @@
         background: var(--amber);
     }
 
-    .white-section {
-        background: var(--white);
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(28px, 3.5vw, 48px);
+        font-weight: 700;
+        color: var(--deepNavy);
+        line-height: 1.2;
+        margin-top: 8px;
     }
 
-    .offwhite-section {
-        background: var(--offWhite);
-    }
-
-    .navy-section {
-        background: linear-gradient(135deg, var(--deepNavy) 0%, #243654 100%);
+    section.hero h2 {
         color: var(--white);
+    }
+
+    /* Trust Bar */
+    .trust-bar {
+        background: var(--white);
+        padding: 40px;
+        border-bottom: 1px solid var(--lightGray);
         text-align: center;
     }
 
-    .navy-section h2 {
+    .trust-bar-text {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--charcoal);
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 20px;
+    }
+
+    .trust-logos {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+
+    .trust-logo {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        color: rgba(45,55,72,0.3);
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+    }
+
+    /* Sections */
+    .offWhite {
+        background: var(--offWhite);
+    }
+
+    .navy {
+        background: var(--heroNavy);
         color: var(--white);
     }
 
-    .navy-section p {
-        color: rgba(255,255,255,0.75);
+    .navy h2 {
+        color: var(--white);
     }
 
+    /* Grid */
     .grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 24px;
-        margin-top: 32px;
+        margin-top: 48px;
     }
 
+    /* Card */
     .card {
         background: var(--white);
         border-radius: 12px;
         padding: 32px;
         border: 1px solid var(--lightGray);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         transition: all 0.3s ease;
     }
 
     .card:hover {
-        box-shadow: 0 8px 32px rgba(0,0,0,0.08);
         transform: translateY(-4px);
+        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
     }
 
+    .card h3 {
+        font-family: 'Playfair Display', serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--deepNavy);
+        margin-bottom: 12px;
+    }
+
+    .card p {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 15px;
+        color: var(--textMedium);
+        margin-bottom: 16px;
+    }
+
+    .card-icon {
+        width: 36px;
+        height: 36px;
+        margin-bottom: 20px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .nav-links {
+            gap: 16px;
+        }
+
+        .nav-links a {
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        section {
+            padding: 48px 20px;
+        }
+
+        .hero {
+            padding: 100px 20px 60px;
+        }
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        margin-top: 72px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .stat {
+        padding: 28px 24px;
+        background: rgba(255,255,255,0.02);
+        border-right: 1px solid rgba(255,255,255,0.06);
+        text-align: center;
+    }
+
+    .stat:last-child {
+        border-right: none;
+    }
+
+    .stat-number {
+        font-family: 'Playfair Display', serif;
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--white);
+        line-height: 1;
+    }
+
+    .stat-label {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        color: var(--textLight);
+        margin-top: 8px;
+    }
+
+    /* Footer */
     footer {
         background: var(--heroNavy);
-        padding: 64px clamp(20px, 5vw, 60px) 32px;
+        padding: 64px 40px 32px;
+        color: var(--white);
+    }
+
+    footer h4 {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 16px;
+    }
+
+    footer p {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 14px;
+        color: var(--textLight);
+        margin-bottom: 8px;
     }
 
     .footer-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 40px;
-        margin-bottom: 40px;
+        gap: 32px;
+        margin-bottom: 24px;
     }
 
-    .footer-text {
-        font-size: 14px;
-        color: var(--textLight);
-        line-height: 1.6;
+    .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.06);
+        padding-top: 24px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
     }
 
-    .footer-title {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--white);
-        text-transform: uppercase;
-        margin-bottom: 16px;
+    /* Text Center */
+    .text-center {
+        text-align: center;
     }
 
-    .cta-section {
+    .text-center > * {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .max-w-640 {
+        max-width: 640px;
+    }
+
+    .max-w-600 {
         max-width: 600px;
-        margin: 0 auto;
-        padding: 96px clamp(20px, 5vw, 60px);
     }
 
-    @media (max-width: 768px) {
-        .nav-links { display: none; }
-        h1 { margin: 12px 0 16px; }
-        .section { padding: 60px clamp(20px, 5vw, 40px); }
+    .margin-top-64 {
+        margin-top: 64px;
+    }
+
+    .margin-bottom-56 {
+        margin-bottom: 56px;
+    }
+
+    .margin-bottom-48 {
+        margin-bottom: 48px;
     }
 </style>
 ```
 
 </head>
 <body>
-    <!-- NAVIGATION -->
+    <!-- Navigation -->
     <nav id="nav">
-        <div class="nav-logo">
-            <span style="font-size: 22px;">⌘</span>
-            <span>Northset</span>
-        </div>
-        <div style="display: flex; align-items: center; gap: 32px;">
-            <div class="nav-links">
-                <span onclick="document.getElementById('home').scrollIntoView()">Home</span>
-                <span onclick="document.getElementById('services').scrollIntoView()">Services</span>
-                <span onclick="document.getElementById('demos').scrollIntoView()">AI Demos</span>
+        <div class="nav-container">
+            <div class="logo">
+                <span style="color: var(--amber); font-size: 24px;">◆</span>
+                <span class="logo-text">Northset</span>
             </div>
-            <button onclick="alert('Calendly widget coming soon!')">Book a Call</button>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#services">Services</a>
+                <a href="#demos">AI Demos</a>
+                <a href="#results">Results</a>
+                <button class="btn btn-primary">Book a Strategy Call</button>
+            </div>
         </div>
     </nav>
 
 ```
-<!-- HERO -->
+<!-- Hero Section -->
 <section class="hero" id="home">
     <div class="hero-content">
-        <div style="max-width: 720px; padding-top: 120px;">
-            <div class="section-label">Fractional CMO · Austin, TX</div>
-            <h1>Your outsourced <span style="color: var(--amber);">marketing department.</span></h1>
-            <p style="font-size: clamp(17px, 2vw, 20px); color: rgba(255,255,255,0.75); margin-bottom: 36px; max-width: 540px;">
-                One strategic partner. Not five disconnected vendors. CMO-level strategy, AI employees, and hands-on execution — all at a fraction of the cost.
-            </p>
-            <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px;">
-                <button onclick="alert('Strategy call booking coming soon!')">Book Your Free Strategy Call →</button>
-                <button style="background: transparent; border: 1.5px solid rgba(255,255,255,0.3); color: var(--white);" onclick="document.getElementById('demos').scrollIntoView()">See AI Demos →</button>
-            </div>
-            <p style="font-size: 13px; color: rgba(255,255,255,0.5);">Free 30-minute consultation · No commitment required</p>
+        <div class="section-label">Fractional CMO · Austin, TX</div>
+        <h1>
+            Your outsourced<br/>
+            <span>marketing department.</span>
+        </h1>
+        <p>One strategic partner. Not five disconnected vendors. CMO-level strategy, AI employees, and hands-on execution — all in one place.</p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 24px;">
+            <button class="btn btn-primary" style="font-size: 16px; padding: 16px 32px;">Book Your Free Strategy Call →</button>
+            <button class="btn btn-outline" style="font-size: 16px; padding: 16px 32px;">See AI in Action →</button>
         </div>
+        <p style="font-size: 13px; color: rgba(255,255,255,0.6);">Free 30-minute consultation · No commitment required</p>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 72px; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 24px; max-width: 700px;">
-            <div style="padding: 12px;">
-                <div style="font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--amber);">8+</div>
-                <div style="font-size: 13px; color: var(--textLight); margin-top: 4px;">Years Experience</div>
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat">
+                <div class="stat-number">8+</div>
+                <div class="stat-label">Years Experience</div>
             </div>
-            <div style="padding: 12px;">
-                <div style="font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--amber);">42K</div>
-                <div style="font-size: 13px; color: var(--textLight); margin-top: 4px;">Austin SMBs</div>
+            <div class="stat">
+                <div class="stat-number">42K</div>
+                <div class="stat-label">Austin SMBs</div>
             </div>
-            <div style="padding: 12px;">
-                <div style="font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--amber);">24/7</div>
-                <div style="font-size: 13px; color: var(--textLight); margin-top: 4px;">AI Employees</div>
+            <div class="stat">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">AI Employees</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">Profit Margins</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- SERVICES -->
-<section class="white-section" id="services">
-    <div class="section">
-        <div style="text-align: center; max-width: 600px; margin: 0 auto 56px;">
-            <div class="section-label">What We Do</div>
-            <h2>Everything your marketing needs. One strategic partner.</h2>
-        </div>
+<!-- Trust Bar -->
+<div class="trust-bar">
+    <div class="trust-bar-text">Trusted by Austin businesses</div>
+    <div class="trust-logos">
+        <span class="trust-logo">Dental Practice Co.</span>
+        <span class="trust-logo">Hill Country HVAC</span>
+        <span class="trust-logo">Austin Legal Group</span>
+        <span class="trust-logo">Eastside Realty</span>
+    </div>
+</div>
+
+<!-- Services Section -->
+<section id="services">
+    <div class="section-container text-center">
+        <div class="section-label">What We Do</div>
+        <h2 style="margin-bottom: 24px;">Everything your marketing needs.<br/>One strategic partner.</h2>
+        <p style="font-size: 17px; color: var(--textMedium); margin-bottom: 48px;">Stop juggling five different vendors. Get one strategic leader who understands your business, manages all channels, and delivers results.</p>
 
         <div class="grid">
             <div class="card">
+                <div style="font-size: 36px; margin-bottom: 20px;">🎯</div>
                 <h3>Fractional CMO</h3>
-                <p>C-suite marketing strategy with multi-channel execution.</p>
+                <p>C-suite marketing leadership without the $200K salary. Strategic direction, competitive analysis, and quarterly planning.</p>
             </div>
             <div class="card">
+                <div style="font-size: 36px; margin-bottom: 20px;">🤖</div>
                 <h3>AI Employees</h3>
-                <p>24/7 AI receptionists and chatbots that work while you sleep.</p>
+                <p>24/7 AI receptionists, chatbots, and intake systems. Never miss another lead. Highest-margin service ($800-1,500/mo).</p>
             </div>
             <div class="card">
+                <div style="font-size: 36px; margin-bottom: 20px;">🌐</div>
                 <h3>Website Design</h3>
-                <p>Conversion-optimized sites that turn visitors into customers.</p>
+                <p>Conversion-optimized sites that rank on Google and convert visitors into customers. From mockup to production in days.</p>
             </div>
             <div class="card">
+                <div style="font-size: 36px; margin-bottom: 20px;">📍</div>
                 <h3>Local SEO & Ads</h3>
-                <p>Dominate Google Maps and paid advertising platforms.</p>
+                <p>Dominate Google Maps and search results. Google Ads, Meta Ads, and SEO strategies that drive qualified leads.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section class="offwhite-section">
-    <div class="section">
-        <div style="text-align: center; margin-bottom: 56px;">
-            <div class="section-label">Client Results</div>
-            <h2>Real results for Austin businesses.</h2>
-        </div>
+<!-- Pricing Section -->
+<section class="offWhite" id="pricing">
+    <div class="section-container text-center">
+        <div class="section-label">Services</div>
+        <h2 style="margin-bottom: 24px;">Three Tiers. One Strategic Identity.</h2>
+        <p style="font-size: 17px; color: var(--textMedium); margin-bottom: 48px; max-width: 600px; margin-left: auto; margin-right: auto;">Choose the level of strategic support your business needs. Every tier includes AI tools, content strategy, and hands-on execution.</p>
 
-        <div class="grid">
-            <div class="card" style="display: flex; flex-direction: column;">
-                <div style="display: flex; gap: 2px; margin-bottom: 16px;">
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                </div>
-                <p style="font-style: italic; flex: 1; margin-bottom: 20px;">"Northset rebuilt our website and added an AI receptionist. We went from 2-3 new patient calls per week to 8-10."</p>
-                <div style="border-top: 1px solid var(--lightGray); padding-top: 16px;">
-                    <div style="font-weight: 600; color: var(--deepNavy);">Dr. Sarah Chen</div>
-                    <div style="font-size: 13px; color: var(--textMedium);">Cedar Park Family Dental</div>
-                </div>
-            </div>
-
-            <div class="card" style="display: flex; flex-direction: column;">
-                <div style="display: flex; gap: 2px; margin-bottom: 16px;">
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                    <span style="color: var(--amber);">★</span>
-                </div>
-                <p style="font-style: italic; flex: 1; margin-bottom: 20px;">"I was spending $3K/month on ads with no strategy. They organized it and we cut cost-per-lead by 60%."</p>
-                <div style="border-top: 1px solid var(--lightGray); padding-top: 16px;">
-                    <div style="font-weight: 600; color: var(--deepNavy);">Marcus Williams</div>
-                    <div style="font-size: 13px; color: var(--textMedium);">Williams Plumbing & HVAC</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- AI DEMOS -->
-<section class="white-section" id="demos">
-    <div class="section">
-        <div style="text-align: center; margin-bottom: 56px;">
-            <div class="section-label">AI Demo Gallery</div>
-            <h2>See AI employees in action.</h2>
-        </div>
-
-        <div class="grid">
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
             <div class="card">
-                <div style="font-size: 12px; font-weight: 600; color: var(--amber); text-transform: uppercase; margin-bottom: 8px;">For Dental Practices</div>
-                <h3>AI Receptionist</h3>
-                <p>Appointment booking, insurance questions, after-hours responses.</p>
+                <h3>Foundation</h3>
+                <div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: var(--deepNavy); margin: 16px 0 8px;">$1,500</div>
+                <div style="font-size: 15px; color: var(--textMedium); margin-bottom: 24px;">/month</div>
+                <p>Strategic direction with one core marketing channel.</p>
+                <div style="text-align: left; margin-top: 24px;">
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ Monthly strategy call</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ 1 core channel managed</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ AI content calendar</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ Monthly reporting</p>
+                </div>
             </div>
-            <div class="card">
-                <div style="font-size: 12px; font-weight: 600; color: var(--amber); text-transform: uppercase; margin-bottom: 8px;">For Home Services</div>
-                <h3>AI Lead Screener</h3>
-                <p>Qualifies urgency, captures details, routes emergencies.</p>
+
+            <div class="card" style="background: var(--deepNavy); color: var(--white); border: 2px solid var(--amber); transform: scale(1.03); position: relative;">
+                <div style="position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--amber); color: var(--white); padding: 6px 20px; border-radius: 20px; font-size: 12px; font-weight: 700;">Most Popular</div>
+                <h3 style="color: var(--white);">Growth</h3>
+                <div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: var(--amber); margin: 16px 0 8px;">$3,000</div>
+                <div style="font-size: 15px; color: rgba(255,255,255,0.6); margin-bottom: 24px;">/month</div>
+                <p>Multi-channel marketing with AI automation and content.</p>
+                <div style="text-align: left; margin-top: 24px;">
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ Bi-weekly strategy calls</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ 2–3 channels managed</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ AI chatbot on website</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ Content creation</p>
+                </div>
             </div>
+
             <div class="card">
-                <div style="font-size: 12px; font-weight: 600; color: var(--amber); text-transform: uppercase; margin-bottom: 8px;">For Law Firms</div>
-                <h3>AI Website Chat</h3>
-                <p>FAQs, case qualification, consultation scheduling.</p>
+                <h3>Accelerate</h3>
+                <div style="font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 700; color: var(--deepNavy); margin: 16px 0 8px;">$5,000</div>
+                <div style="font-size: 15px; color: var(--textMedium); margin-bottom: 24px;">/month</div>
+                <p>Full fractional CMO leadership across all channels.</p>
+                <div style="text-align: left; margin-top: 24px;">
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ Weekly strategy calls</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ All channels managed</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ Full AI suite</p>
+                    <p style="margin-bottom: 12px; font-size: 14px;">✓ Executive reporting</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA -->
-<section class="navy-section">
-    <div class="cta-section">
-        <h2 style="color: var(--white); margin-bottom: 16px;">Ready to stop guessing and <span style="color: var(--amber);">start growing?</span></h2>
-        <p style="margin-bottom: 24px;">Book a free 30-minute strategy call. No pitch deck. No hard sell.</p>
-        <button onclick="alert('Strategy call booking coming soon!')">Book My Free Strategy Call →</button>
-        <p style="margin-top: 12px; font-size: 13px; color: rgba(255,255,255,0.5);">Limited to 5–7 active clients</p>
+<!-- CTA Section -->
+<section class="navy" id="cta">
+    <div class="section-container text-center">
+        <h2 style="margin-bottom: 20px;">Ready to stop guessing and<br/><span style="color: var(--amber);">start growing?</span></h2>
+        <p style="font-size: 17px; color: rgba(255,255,255,0.8); margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto;">Book a free 30-minute strategy call. No pitch deck. No hard sell. Just a clear-eyed assessment of your biggest opportunities.</p>
+        <button class="btn btn-primary" style="font-size: 16px; padding: 16px 32px; margin-bottom: 16px;">Book My Free Strategy Call →</button>
+        <p style="font-size: 13px; color: rgba(255,255,255,0.6);">Limited to 5–7 active clients to ensure quality</p>
     </div>
 </section>
 
-<!-- FOOTER -->
+<!-- Footer -->
 <footer>
-    <div style="max-width: 1200px; margin: 0 auto;">
+    <div class="section-container">
         <div class="footer-grid">
             <div>
-                <div style="font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 16px;">Northset</div>
-                <p class="footer-text">Fractional CMO & AI-Powered Marketing for Austin's local businesses.</p>
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
+                    <span style="color: var(--amber); font-size: 24px;">◆</span>
+                    <span class="logo-text">Northset</span>
+                </div>
+                <p>Fractional CMO & AI-Powered Marketing Strategy for Austin's local businesses.</p>
             </div>
             <div>
-                <div class="footer-title">Services</div>
-                <p class="footer-text">Fractional CMO</p>
-                <p class="footer-text">AI Employees</p>
-                <p class="footer-text">Website Design</p>
-                <p class="footer-text">Local SEO</p>
+                <h4>Services</h4>
+                <p>Fractional CMO</p>
+                <p>AI Employees</p>
+                <p>Website Design</p>
+                <p>Local SEO</p>
             </div>
             <div>
-                <div class="footer-title">Get Started</div>
-                <button onclick="alert('Strategy call booking coming soon!')">Book Free Call</button>
-                <p class="footer-text" style="margin-top: 12px;">Austin, TX<br>info@northset.co</p>
+                <h4>Industries</h4>
+                <p>Home Services</p>
+                <p>Dental & Wellness</p>
+                <p>Professional Services</p>
+                <p>Restaurants</p>
+            </div>
+            <div>
+                <h4>Get Started</h4>
+                <button class="btn btn-primary">Book Your Free Strategy Call</button>
+                <p style="margin-top: 16px;">Austin, Texas<br/>info@northset.co</p>
             </div>
         </div>
-
-        <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 24px; text-align: center;">
-            <p class="footer-text">© 2026 Northset. All rights reserved.</p>
+        <div class="footer-bottom">
+            <p>© 2026 Northset. All rights reserved.</p>
+            <p>Privacy Policy · Terms of Service</p>
         </div>
     </div>
 </footer>
 
 <script>
-    // Navbar scroll effect
+    // Scroll effect on nav
     window.addEventListener('scroll', function() {
         const nav = document.getElementById('nav');
+        const navContainer = nav.querySelector('.nav-container');
         if (window.scrollY > 40) {
             nav.classList.add('scrolled');
+            navContainer.classList.add('scrolled');
         } else {
             nav.classList.remove('scrolled');
+            navContainer.classList.remove('scrolled');
         }
     });
 </script>
