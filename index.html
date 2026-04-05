@@ -1,108 +1,809 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Northset | Your Austin Marketing Partner</title>
-  <meta name="description" content="Your Austin marketing partner. Strategy, websites, and digital growth." />
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://googleapis.com" />
-  <link rel="preconnect" href="https://gstatic.com" crossorigin />
-  <link href="https://googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <meta name="description" content="Your Austin marketing partner. Strategy, websites, and digital growth — all handled personally for your business." />
+
+  <!-- CRITICAL: Load fonts FIRST in head -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Load React libraries (production builds) -->
+
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+  <!-- Load Babel LAST -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 
   <style>
-    /* Reset & Base Styles */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { 
-      font-family: "DM Sans", sans-serif; 
-      background: #FFFFFF; 
-      color: #1a1a1a;
-      line-height: 1.6;
-    }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body { font-family: "DM Sans", sans-serif; background: #FFFFFF; -webkit-font-smoothing: antialiased; }
+    ::selection { background: rgba(212,135,14,0.3); }
 
-    /* Simple Layout */
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 40px 20px;
-    }
-
-    header {
-      text-align: center;
-      padding: 80px 20px;
-      background: #f9f9f9;
-    }
-
-    h1 {
-      font-family: "Playfair Display", serif;
-      font-size: 3rem;
-      margin-bottom: 20px;
-    }
-
-    .hero-subtitle {
-      font-size: 1.2rem;
-      color: #666;
-      max-width: 600px;
-      margin: 0 auto 30px;
-    }
-
-    .cta-button {
-      display: inline-block;
-      background: #d4870e;
-      color: white;
-      padding: 15px 30px;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    .meet-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      align-items: center;
-      margin-top: 60px;
-    }
-
-    .andrew-photo {
-      width: 100%;
-      max-width: 380px;
-      border-radius: 16px;
-      background: #eee; /* Placeholder until image loads */
-    }
-
-    /* Mobile Responsive */
+    /* ── Navigation ── */
     @media (max-width: 768px) {
-      .meet-grid { grid-template-columns: 1fr; text-align: center; }
-      h1 { font-size: 2.2rem; }
+      .nav-links { display: none !important; }
+      .mobile-menu-btn { display: block !important; }
+    }
+
+    /* ── Section padding tighter on mobile ── */
+    @media (max-width: 480px) {
+      section { padding-left: 20px !important; padding-right: 20px !important; }
     }
   </style>
+
 </head>
 <body>
+  <div id="root"></div>
 
-  <header>
-    <div class="container">
-      <h1>Northset</h1>
-      <p class="hero-subtitle">Your Austin marketing partner. Strategy, websites, and digital growth — handled personally for your business.</p>
-      <a href="mailto:your-email@example.com" class="cta-button">Work With Me</a>
-    </div>
-  </header>
+  <!-- BABEL SCRIPT WITH WARNING SUPPRESSION -->
 
-  <main class="container">
-    <div class="meet-grid">
-      <div class="photo-column">
-        <!-- Replace the src with your actual image URL later -->
-        <div class="andrew-photo" style="height: 450px; display: flex; align-items: center; justify-content: center; color: #999;">
-          [Photo Placeholder]
+  <script type="text/babel">
+    // Suppress Babel's development warning for production
+    if (typeof window !== 'undefined') {
+      window.__BABEL_DISABLE_CACHE__ = true;
+    }
+    
+    const { useState, useEffect, useRef } = React;
+
+    const COLORS = {
+      heroNavy: "#0F1B2D",
+      deepNavy: "#1B2A4A",
+      charcoal: "#2D3748",
+      amber: "#D4870E",
+      amberHover: "#B8740C",
+      amberLight: "rgba(212,135,14,0.12)",
+      white: "#FFFFFF",
+      offWhite: "#F7F5F2",
+      lightGray: "#E8E6E3",
+      textLight: "#94A3B8",
+      textMedium: "#64748B",
+      navyGlow: "rgba(15,27,45,0.95)",
+    };
+
+    // ─── Icon Components ───
+    const ArrowRight = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+      </svg>
+    );
+    
+    const CheckIcon = () => (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={COLORS.amber} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    );
+    
+    const StarIcon = () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill={COLORS.amber} stroke="none">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+      </svg>
+    );
+    
+    const CompassIcon = () => (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={COLORS.amber} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+      </svg>
+    );
+    
+    const MenuIcon = () => (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    );
+    
+    const CloseIcon = () => (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    );
+
+    const serviceIcons = {
+      seo: (
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.amber} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      ),
+      web: (
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.amber} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      ),
+      strategy: (
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.amber} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      ),
+      ai: (
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke={COLORS.amber} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="11"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="12" y1="16" x2="12" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/>
+        </svg>
+      ),
+    };
+
+    // ─── Shared Components ───
+    function FadeIn({ children, delay = 0 }) {
+      const [visible, setVisible] = useState(false);
+      const ref = useRef();
+      useEffect(() => {
+        const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.1 });
+        if (ref.current) obs.observe(ref.current);
+        return () => obs.disconnect();
+      }, []);
+      return (
+        <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)", transition: `opacity 0.6s ease ${delay}s, transform 0.6s ease ${delay}s` }}>
+          {children}
         </div>
-      </div>
-      <div class="text-column">
-        <h2 style="font-family: 'Playfair Display'; margin-bottom: 20px;">Meet Andrew</h2>
-        <p>I help Austin-based businesses grow their digital presence through tailored marketing strategies and high-performing websites.</p>
-      </div>
-    </div>
-  </main>
+      );
+    }
+
+    function Button({ children, variant = "primary", size = "md", onClick, style = {} }) {
+      const [hovered, setHovered] = useState(false);
+      const base = {
+        display: "inline-flex", alignItems: "center", gap: 8, border: "none", cursor: "pointer",
+        fontFamily: "'DM Sans', sans-serif", fontWeight: 600, letterSpacing: "0.02em",
+        borderRadius: 6, transition: "all 0.25s ease", whiteSpace: "nowrap",
+        ...(size === "lg" ? { padding: "16px 32px", fontSize: 16 } : { padding: "12px 24px", fontSize: 14 }),
+      };
+      const variants = {
+        primary: {
+          background: hovered ? COLORS.amberHover : COLORS.amber, color: COLORS.white,
+          boxShadow: hovered ? "0 8px 24px rgba(212,135,14,0.35)" : "0 4px 12px rgba(212,135,14,0.25)",
+        },
+        outline: {
+          background: "transparent", color: hovered ? COLORS.amber : COLORS.white,
+          border: `1.5px solid ${hovered ? COLORS.amber : "rgba(255,255,255,0.3)"}`,
+        },
+        ghost: {
+          background: hovered ? COLORS.amberLight : "transparent",
+          color: hovered ? COLORS.amber : COLORS.charcoal,
+        },
+      };
+      return (
+        <button style={{ ...base, ...variants[variant], ...style }}
+          onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} onClick={onClick}>
+          {children}
+        </button>
+      );
+    }
+
+    function SectionLabel({ children }) {
+      return (
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "'DM Sans', sans-serif",
+          fontSize: 12, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase",
+          color: COLORS.amber, marginBottom: 12 }}>
+          <span style={{ display: "inline-block", width: 24, height: 2, background: COLORS.amber }}></span>
+          {children}
+        </span>
+      );
+    }
+
+    // ─── Navigation ───
+    function Nav({ page, setPage }) {
+      const [scrolled, setScrolled] = useState(false);
+      const [mobileOpen, setMobileOpen] = useState(false);
+      useEffect(() => {
+        const handler = () => setScrolled(window.scrollY > 40);
+        window.addEventListener("scroll", handler);
+        return () => window.removeEventListener("scroll", handler);
+      }, []);
+      const links = [
+        { label: "Home", id: "home" },
+        { label: "Services", id: "services" },
+        { label: "What Your Website Can Look Like", id: "demos" },
+      ];
+      return (
+        <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 1000,
+          background: scrolled ? COLORS.navyGlow : "transparent",
+          backdropFilter: scrolled ? "blur(12px)" : "none",
+          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
+          transition: "all 0.35s ease", padding: "0 clamp(20px, 5vw, 60px)" }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", justifyContent: "space-between",
+            alignItems: "center", height: scrolled ? 64 : 76, transition: "height 0.3s ease" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}
+              onClick={() => { setPage("home"); window.scrollTo(0, 0); }}>
+              <CompassIcon />
+              <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700,
+                color: COLORS.white, letterSpacing: "-0.01em" }}>Northset</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
+              <div className="nav-links" style={{ display: "flex", gap: 28 }}>
+                {links.map(l => (
+                  <span key={l.label} onClick={() => { setPage(l.id); window.scrollTo(0, 0); setMobileOpen(false); }}
+                    style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500,
+                      color: page === l.id ? COLORS.amber : "rgba(255,255,255,0.7)",
+                      cursor: "pointer", transition: "color 0.2s", letterSpacing: "0.01em" }}>
+                    {l.label}
+                  </span>
+                ))}
+              </div>
+              <Button size="md" onClick={() => {}}>Book Your Call</Button>
+              <div className="mobile-menu-btn" style={{ display: "none", color: COLORS.white, cursor: "pointer" }}
+                onClick={() => setMobileOpen(!mobileOpen)}>
+                {mobileOpen ? <CloseIcon /> : <MenuIcon />}
+              </div>
+            </div>
+          </div>
+          {mobileOpen && (
+            <div style={{ background: COLORS.heroNavy, padding: "20px 0", display: "flex", flexDirection: "column", gap: 12 }}>
+              {links.map(l => (
+                <span key={l.label} onClick={() => { setPage(l.id); window.scrollTo(0, 0); setMobileOpen(false); }}
+                  style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: "rgba(255,255,255,0.8)", cursor: "pointer" }}>
+                  {l.label}
+                </span>
+              ))}
+              <Button size="md">Book Your Call</Button>
+            </div>
+          )}
+        </nav>
+      );
+    }
+
+    // ─── Footer ───
+    function Footer() {
+      return (
+        <footer style={{ background: COLORS.heroNavy, padding: "64px clamp(20px,5vw,60px) 32px", marginTop: 96 }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 40, marginBottom: 40 }}>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                  <CompassIcon /><span style={{ fontFamily: "'Playfair Display', serif", fontSize: 18, fontWeight: 700, color: COLORS.white }}>Northset</span>
+                </div>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: COLORS.textLight }}>
+                  Your marketing partner. Austin-based, locally focused, personally dedicated to your success.
+                </p>
+              </div>
+              <div>
+                <h4 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 700, color: COLORS.white,
+                  textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 16 }}>Services</h4>
+                {["Marketing Strategy", "Demand Generation", "Website Design & Experience", "AI Made Simple for SMBs"].map(s => (
+                  <p key={s} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: COLORS.textLight, marginBottom: 8 }}>{s}</p>
+                ))}
+              </div>
+              <div>
+                <h4 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 700, color: COLORS.white,
+                  textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 16 }}>Industries</h4>
+                {["Home Services", "Dental & Wellness", "Professional Services", "Restaurants", "Real Estate"].map(s => (
+                  <p key={s} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: COLORS.textLight, marginBottom: 8 }}>{s}</p>
+                ))}
+              </div>
+              <div>
+                <h4 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 700, color: COLORS.white,
+                  textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 16 }}>Get Started</h4>
+                <Button variant="primary" size="md">Book Your Call</Button>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: COLORS.textLight, marginTop: 16 }}>
+                  Austin, Texas<br/>info@northset.co
+                </p>
+              </div>
+            </div>
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 24, display: "flex", justifyContent: "space-between" }}>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: COLORS.textMedium }}>
+                © 2026 Northset. All rights reserved.
+              </p>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: COLORS.textMedium }}>
+                Privacy Policy · Terms of Service
+              </p>
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    // ══════════════════════════════════════════
+    // PAGE 1: HOMEPAGE
+    // ══════════════════════════════════════════
+    function HomePage({ setPage }) {
+      const stats = [
+        { num: "500+", label: "Fortune 500 Partners" },
+        { num: "8+", label: "Years Experience" },
+        { num: "Austin", label: "Native & Proud" },
+        { num: "Few", label: "Clients at a Time" },
+      ];
+      const services = [
+        { icon: serviceIcons.strategy, title: "Marketing Strategy", desc: "High-level thinking without the cost of a Marketing Department." },
+        { icon: serviceIcons.ai, title: "AI \"Employees\"", desc: "Save thousands by having AI take care of manual work so your team doesn't have to." },
+        { icon: serviceIcons.web, title: "Website Design & Experience", desc: "Optimized sites that look premium and perform while staying simple to maintain and use." },
+        { icon: serviceIcons.seo, title: "Demand Generation", desc: "Improve your search results and get new clients from social media apps that make sense for you. Let's get you more customers." },
+      ];
+      const testimonials = [
+        { name: "Dr. Sarah Chen", title: "Cedar Park Family Dental", text: "Northset rebuilt our entire marketing strategy. 3 months in, we have 40% more qualified leads.", stars: 5 },
+        { name: "Marcus Williams", title: "Williams Plumbing & HVAC", text: "Finally have a real marketing partner who understands our business. Revenue up 28%.", stars: 5 },
+        { name: "Jennifer Torres", title: "Torres & Associates Law", text: "Strategic partnership. Not just tactics. They think like executives.", stars: 5 },
+      ];
+
+      return (
+        <div>
+          {/* HERO */}
+          <section style={{ background: `linear-gradient(165deg, ${COLORS.heroNavy} 0%, ${COLORS.deepNavy} 100%)`,
+            minHeight: "100vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden",
+            padding: "120px clamp(20px,5vw,60px) 80px" }}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, opacity: 0.03,
+              backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.5) 1px, transparent 1px)",
+              backgroundSize: "40px 40px" }} />
+            <div style={{ maxWidth: 1200, margin: "0 auto", width: "100%", position: "relative", zIndex: 2 }}>
+              <div style={{ maxWidth: 720 }}>
+                <FadeIn>
+                  <SectionLabel>Marketing Partner · Austin, TX</SectionLabel>
+                </FadeIn>
+                <FadeIn delay={0.15}>
+                  <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(38px, 5vw, 64px)",
+                    fontWeight: 700, color: COLORS.white, lineHeight: 1.1, margin: "16px 0 24px",
+                    letterSpacing: "-0.02em" }}>
+                    Your outsourced marketing department.<br/>
+                    <span style={{ color: COLORS.amber }}>One Partner.</span>
+                  </h1>
+                </FadeIn>
+                <FadeIn delay={0.3}>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(17px, 2vw, 20px)",
+                    color: "rgba(255,255,255,0.8)", lineHeight: 1.7, maxWidth: 540, marginBottom: 36 }}>
+                    You're too busy running your business — let someone else handle your website and digital presence.
+                  </p>
+                </FadeIn>
+                <FadeIn delay={0.45}>
+                  <div style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
+                    <Button size="lg">Book Your Free Strategy Call <ArrowRight /></Button>
+                    <Button variant="outline" size="lg" onClick={() => { setPage("demos"); window.scrollTo(0, 0); }}>What Your Website Can Look Like</Button>
+                  </div>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 16 }}>
+                    Free 30-minute consultation · No commitment required
+                  </p>
+                </FadeIn>
+              </div>
+              {/* Stats bar */}
+              <FadeIn delay={0.6}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+                  marginTop: 72, background: "rgba(255,255,255,0.06)", borderRadius: 12, overflow: "hidden" }}>
+                  {stats.map(s => (
+                    <div key={s.label} style={{ padding: "28px 24px", background: "rgba(255,255,255,0.02)", borderRight: "1px solid rgba(255,255,255,0.1)" }}>
+                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: COLORS.amber }}>
+                        {s.num}
+                      </div>
+                      <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.6)" }}>
+                        {s.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </FadeIn>
+            </div>
+          </section>
+
+          {/* PAIN POINTS */}
+          <section style={{ background: COLORS.offWhite, padding: "96px clamp(20px,5vw,60px)" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <FadeIn>
+                <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 64px" }}>
+                  <SectionLabel>The Problem</SectionLabel>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3.5vw, 44px)",
+                    fontWeight: 700, color: COLORS.deepNavy, lineHeight: 1.2, marginTop: 8 }}>
+                    You're too busy running your business<br/>to market it properly.
+                  </h2>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, color: COLORS.textMedium, marginTop: 16, lineHeight: 1.7 }}>
+                    You've tried agencies that overpromise. Freelancers who disappear. Tactics that don't connect. Your business deserves better.
+                  </p>
+                </div>
+              </FadeIn>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24 }}>
+                {[
+                  { emoji: "📞", stat: "60–80%", text: "of inbound calls go unanswered — every marketing dollar wasted" },
+                  { emoji: "🔍", stat: "61%", text: "of businesses aren't visible on Google — your competitors are" },
+                  { emoji: "💰", stat: "63%", text: "spend under $1K/year on marketing total — too little to move the needle" },
+                ].map((p, i) => (
+                  <FadeIn key={i} delay={i * 0.12}>
+                    <div style={{ background: COLORS.white, borderRadius: 12, padding: 32, border: `1px solid ${COLORS.lightGray}`,
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+                      <span style={{ fontSize: 32 }}>{p.emoji}</span>
+                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, color: COLORS.amber, marginTop: 12 }}>
+                        {p.stat}
+                      </div>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: COLORS.textMedium, marginTop: 8 }}>
+                        {p.text}
+                      </p>
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* ABOUT ME */}
+          <section style={{ background: COLORS.white, padding: "96px clamp(20px,5vw,60px)" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <FadeIn>
+                <div style={{ textAlign: "center", marginBottom: 56 }}>
+                  <SectionLabel>Who I Am</SectionLabel>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3.5vw, 44px)",
+                    fontWeight: 700, color: COLORS.deepNavy, lineHeight: 1.2, marginTop: 8 }}>
+                    Austin native. Marketing strategist. Your partner.
+                  </h2>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, color: COLORS.textMedium, marginTop: 16, maxWidth: 680, margin: "16px auto 0", lineHeight: 1.7 }}>
+                    I was born and raised in Austin. I know this community. I know what works here. With 8+ years of marketing strategy and execution, I take on only a few clients at a time so you get my undivided attention and expertise.
+                  </p>
+                </div>
+              </FadeIn>
+            </div>
+          </section>
+
+          {/* SERVICES */}
+          <section style={{ background: COLORS.offWhite, padding: "96px clamp(20px,5vw,60px)" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <FadeIn>
+                <div style={{ textAlign: "center", maxWidth: 600, margin: "0 auto 56px" }}>
+                  <SectionLabel>What I Do</SectionLabel>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3.5vw, 44px)",
+                    fontWeight: 700, color: COLORS.deepNavy, lineHeight: 1.2, marginTop: 8 }}>
+                    Everything your marketing needs.<br/>One strategic partner.
+                  </h2>
+                </div>
+              </FadeIn>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24 }}>
+                {services.map((s, i) => (
+                  <FadeIn key={i} delay={i * 0.1}>
+                    <div style={{ background: COLORS.white, borderRadius: 12, padding: 32, border: `1px solid ${COLORS.lightGray}`,
+                      cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 2px 8px rgba(0,0,0,0.04)" }}>
+                      <div style={{ marginBottom: 20 }}>{s.icon}</div>
+                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: COLORS.deepNavy }}>
+                        {s.title}
+                      </h3>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: COLORS.textMedium, marginTop: 8 }}>
+                        {s.desc}
+                      </p>
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+              <FadeIn delay={0.4}>
+                <div style={{ textAlign: "center", marginTop: 40 }}>
+                  <Button variant="ghost" onClick={() => { setPage("services"); window.scrollTo(0, 0); }}>
+                    View All of My Services <ArrowRight />
+                  </Button>
+                </div>
+              </FadeIn>
+            </div>
+          </section>
+
+          {/* PROCESS */}
+          <section style={{ background: COLORS.heroNavy, padding: "96px clamp(20px,5vw,60px)" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <FadeIn>
+                <div style={{ textAlign: "center", marginBottom: 56 }}>
+                  <SectionLabel>How It Works</SectionLabel>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3.5vw, 44px)",
+                    fontWeight: 700, color: COLORS.white, lineHeight: 1.2, marginTop: 8 }}>
+                    The Northset Playbook
+                  </h2>
+                </div>
+              </FadeIn>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: 32 }}>
+                {[
+                  { step: "01", title: "Get to Know You", desc: "Free strategy call to understand your business, goals, and easiest fixes." },
+                  { step: "02", title: "Blueprint", desc: "Custom plan with prioritized channels and clear metrics for your growth." },
+                  { step: "03", title: "Implement Your New Assets", desc: "Execute across all channels — website, SEO, ads, content, and AI systems." },
+                  { step: "04", title: "Scale", desc: "Add more channels as your revenue grows. Optimize based on data." },
+                ].map((p, i) => (
+                  <FadeIn key={i} delay={i * 0.12}>
+                    <div style={{ position: "relative" }}>
+                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 56, fontWeight: 700,
+                        color: "rgba(212,135,14,0.12)", lineHeight: 1, marginBottom: 12 }}>{p.step}</div>
+                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: COLORS.white }}>
+                        {p.title}
+                      </h3>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: "rgba(255,255,255,0.7)", marginTop: 8 }}>
+                        {p.desc}
+                      </p>
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* TESTIMONIALS */}
+          <section style={{ background: COLORS.offWhite, padding: "96px clamp(20px,5vw,60px)" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <FadeIn>
+                <div style={{ textAlign: "center", marginBottom: 56 }}>
+                  <SectionLabel>Real Results</SectionLabel>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3.5vw, 44px)",
+                    fontWeight: 700, color: COLORS.deepNavy, lineHeight: 1.2, marginTop: 8 }}>
+                    Real results for Austin businesses.
+                  </h2>
+                </div>
+              </FadeIn>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
+                {testimonials.map((t, i) => (
+                  <FadeIn key={i} delay={i * 0.12}>
+                    <div style={{ background: COLORS.white, borderRadius: 12, padding: 32, border: `1px solid ${COLORS.lightGray}`,
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.04)", height: "100%", display: "flex", flexDirection: "column" }}>
+                      <div style={{ display: "flex", gap: 2, marginBottom: 16 }}>
+                        {Array(t.stars).fill(0).map((_, j) => <StarIcon key={j} />)}
+                      </div>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: COLORS.textMedium,
+                        fontStyle: "italic", flex: 1 }}>"{t.text}"</p>
+                      <div style={{ marginTop: 20, borderTop: `1px solid ${COLORS.lightGray}`, paddingTop: 16 }}>
+                        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600, color: COLORS.deepNavy }}>
+                          {t.name}
+                        </div>
+                        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: COLORS.textMedium }}>
+                          {t.title}
+                        </div>
+                      </div>
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* CTA BANNER */}
+          <section style={{ background: `linear-gradient(135deg, ${COLORS.deepNavy} 0%, #243654 100%)`,
+            padding: "96px clamp(20px,5vw,60px)", textAlign: "center" }}>
+            <FadeIn>
+              <div style={{ maxWidth: 600, margin: "0 auto" }}>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(28px, 3.5vw, 44px)",
+                  fontWeight: 700, color: COLORS.white, lineHeight: 1.2 }}>
+                  Ready to stop guessing and<br/><span style={{ color: COLORS.amber }}>start growing?</span>
+                </h2>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, color: "rgba(255,255,255,0.7)", marginTop: 16, marginBottom: 32 }}>
+                  Book your free 30-minute strategy call. I'll give you a clear assessment of your biggest opportunities.
+                </p>
+                <Button size="lg">Book My Free Strategy Call <ArrowRight /></Button>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.5)", marginTop: 16 }}>
+                  I work with only a few clients at a time to ensure your success
+                </p>
+              </div>
+            </FadeIn>
+          </section>
+        </div>
+      );
+    }
+
+    // ══════════════════════════════════════════
+    // PAGE 2: SERVICES
+    // ══════════════════════════════════════════
+    function ServicesPage() {
+      const tiers = [
+        { name: "Foundation", price: "$1,500", period: "/month", tag: null, desc: "Strategic direction with one core marketing channel.", features: ["Monthly strategy call", "1 core channel managed", "Content calendar", "Monthly report"] },
+        { name: "Growth", price: "$3,000", period: "/month", tag: "Most Popular", desc: "Multi-channel marketing with AI support and content.", features: ["Bi-weekly strategy calls", "2–3 channels managed", "AI chatbot on website", "Content creation", "Bi-weekly reporting"] },
+        { name: "Accelerate", price: "$5,000", period: "/month", tag: null, desc: "Full marketing leadership across all your channels.", features: ["Weekly strategy calls", "All channels managed", "Full AI suite (chat + phone + intake)", "Unlimited content", "Weekly dashboard"] },
+      ];
+      return (
+        <div>
+          {/* HERO */}
+          <section style={{ background: `linear-gradient(165deg, ${COLORS.heroNavy} 0%, ${COLORS.deepNavy} 100%)`,
+            padding: "160px clamp(20px,5vw,60px) 96px" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto", textAlign: "center" }}>
+              <FadeIn>
+                <SectionLabel>Services</SectionLabel>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(36px, 4.5vw, 56px)",
+                  fontWeight: 700, color: COLORS.white, lineHeight: 1.1, marginTop: 12 }}>
+                  Your marketing partner.<br/><span style={{ color: COLORS.amber }}>One simple choice.</span>
+                </h1>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 18, color: "rgba(255,255,255,0.8)",
+                  maxWidth: 560, margin: "24px auto 0", lineHeight: 1.7 }}>
+                  Choose the level of strategic support your business needs. All plans include strategy, execution, and personal attention.
+                </p>
+              </FadeIn>
+            </div>
+          </section>
+
+          {/* PRICING TIERS */}
+          <section style={{ background: COLORS.offWhite, padding: "96px clamp(20px,5vw,60px)" }}>
+            <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
+                {tiers.map((t, i) => (
+                  <FadeIn key={i} delay={i * 0.12}>
+                    <div style={{
+                      background: i === 1 ? COLORS.deepNavy : COLORS.white,
+                      borderRadius: 16, padding: i === 1 ? "40px 32px" : "32px",
+                      border: i === 1 ? `2px solid ${COLORS.amber}` : `1px solid ${COLORS.lightGray}`,
+                      boxShadow: i === 1 ? "0 16px 48px rgba(212,135,14,0.15)" : "0 2px 8px rgba(0,0,0,0.04)",
+                      transform: i === 1 ? "scale(1.03)" : "scale(1)",
+                      transition: "all 0.3s ease", position: "relative", display: "flex", flexDirection: "column",
+                    }}>
+                      {t.tag && (
+                        <div style={{ position: "absolute", top: -14, left: "50%", transform: "translateX(-50%)",
+                          background: COLORS.amber, color: COLORS.white, fontFamily: "'DM Sans', sans-serif",
+                          fontSize: 12, fontWeight: 700, padding: "6px 20px", borderRadius: 20, letterSpacing: "0.1em" }}>
+                          {t.tag}
+                        </div>
+                      )}
+                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 24, fontWeight: 700,
+                        color: i === 1 ? COLORS.white : COLORS.deepNavy }}>{t.name}</h3>
+                      <div style={{ display: "flex", alignItems: "baseline", gap: 4, margin: "16px 0 8px" }}>
+                        <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 44, fontWeight: 700,
+                          color: i === 1 ? COLORS.amber : COLORS.deepNavy }}>{t.price}</span>
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: i === 1 ? "rgba(255,255,255,0.6)" : COLORS.textMedium }}>
+                          {t.period}
+                        </span>
+                      </div>
+                      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: i === 1 ? "rgba(255,255,255,0.8)" : COLORS.textMedium,
+                        lineHeight: 1.6, marginBottom: 24, minHeight: 48 }}>{t.desc}</p>
+                      <div style={{ flex: 1 }}>
+                        {t.features.map((f, j) => (
+                          <div key={j} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 12 }}>
+                            <div style={{ marginTop: 2 }}><CheckIcon /></div>
+                            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: i === 1 ? "rgba(255,255,255,0.8)" : COLORS.textMedium }}>
+                              {f}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      <Button variant={i === 1 ? "primary" : "ghost"} style={{ width: "100%", justifyContent: "center",
+                        ...(i !== 1 ? { border: `1.5px solid ${COLORS.deepNavy}`, color: COLORS.deepNavy } : {}) }}>
+                        Get Started <ArrowRight />
+                      </Button>
+                    </div>
+                  </FadeIn>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* CTA */}
+          <section style={{ background: COLORS.heroNavy, padding: "80px clamp(20px,5vw,60px)", textAlign: "center" }}>
+            <FadeIn>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, color: COLORS.white, marginBottom: 16 }}>
+                Not sure which is right for you?
+              </h2>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, color: "rgba(255,255,255,0.8)", marginBottom: 24 }}>
+                Book your free strategy call. I'll recommend the right plan based on your goals and budget.
+              </p>
+              <Button size="lg">Book Your Free Strategy Call <ArrowRight /></Button>
+            </FadeIn>
+          </section>
+        </div>
+      );
+    }
+
+    // ══════════════════════════════════════════
+    // PAGE 3: WEBSITE EXAMPLES
+    // ══════════════════════════════════════════
+    function DemosPage() {
+      const [activeDemo, setActiveDemo] = useState(0);
+      const demos = [
+        { title: "AI Receptionist", subtitle: "For Dental Practices", desc: "Your patients book their own appointments 24/7. AI screens calls. Your team focuses on care.", features: ["Answers in under 2 seconds", "Books directly into your schedule", "Handles routine questions"] },
+        { title: "AI Lead Screener", subtitle: "For Home Services", desc: "Every call is answered. Every lead is qualified. Emergencies get priority routing. Never miss revenue again.", features: ["Qualifies by urgency", "Captures job details & address", "Routes emergencies instantly"] },
+        { title: "Modern Website", subtitle: "For Any Business", desc: "Your website does the work. Beautiful design. Clear messaging. Converts visitors into customers. Simple to update.", features: ["Mobile-optimized", "Fast loading", "Clear path to action"] },
+      ];
+      const d = demos[activeDemo];
+      return (
+        <div>
+          {/* HERO */}
+          <section style={{ background: `linear-gradient(165deg, ${COLORS.heroNavy} 0%, ${COLORS.deepNavy} 100%)`,
+            padding: "160px clamp(20px,5vw,60px) 96px" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto", textAlign: "center" }}>
+              <FadeIn>
+                <SectionLabel>Your Website</SectionLabel>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(36px, 4.5vw, 56px)",
+                  fontWeight: 700, color: COLORS.white, lineHeight: 1.1, marginTop: 12 }}>
+                  See what your business<br/><span style={{ color: COLORS.amber }}>can look like.</span>
+                </h1>
+                <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 18, color: "rgba(255,255,255,0.8)",
+                  maxWidth: 520, margin: "24px auto 0", lineHeight: 1.7 }}>
+                  Modern websites and AI systems that work for you. Every example is customized to your industry and goals.
+                </p>
+              </FadeIn>
+            </div>
+          </section>
+
+          {/* INTERACTIVE DEMO SECTION */}
+          <section style={{ background: COLORS.white, padding: "96px clamp(20px,5vw,60px)" }}>
+            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+              <FadeIn>
+                <SectionLabel>Your Options</SectionLabel>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, color: COLORS.deepNavy, marginBottom: 48 }}>
+                  What your business could have.
+                </h2>
+              </FadeIn>
+              {/* Demo tabs */}
+              <div style={{ display: "flex", gap: 12, marginBottom: 48, flexWrap: "wrap" }}>
+                {demos.map((dm, i) => (
+                  <button key={i} onClick={() => setActiveDemo(i)}
+                    style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600,
+                      padding: "12px 20px", borderRadius: 8, border: "none", cursor: "pointer", transition: "all 0.25s",
+                      background: activeDemo === i ? COLORS.deepNavy : COLORS.offWhite,
+                      color: activeDemo === i ? COLORS.white : COLORS.charcoal }}>
+                    {dm.title}
+                  </button>
+                ))}
+              </div>
+              {/* Demo content */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48, alignItems: "center" }}>
+                <div>
+                  <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600, color: COLORS.amber,
+                    textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 8 }}>{d.subtitle}</div>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 32, fontWeight: 700, color: COLORS.deepNavy, marginBottom: 16 }}>
+                    {d.title}
+                  </h3>
+                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, color: COLORS.textMedium, marginBottom: 24 }}>
+                    {d.desc}
+                  </p>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                    {d.features.map((f, i) => (
+                      <div key={i} style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                        <CheckIcon />
+                        <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: COLORS.textMedium }}>
+                          {f}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ marginTop: 32 }}>
+                    <Button size="lg">Learn More <ArrowRight /></Button>
+                  </div>
+                </div>
+                {/* Mock demo window */}
+                <div style={{ background: COLORS.heroNavy, borderRadius: 16, overflow: "hidden", minHeight: 400, padding: 32, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                      <div style={{ maxWidth: "85%", padding: "12px 16px", borderRadius: 12, background: "rgba(255,255,255,0.08)", fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.85)" }}>
+                        Hi! How can I help?
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                      <div style={{ maxWidth: "85%", padding: "12px 16px", borderRadius: 12, background: "rgba(212,135,14,0.2)", fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: COLORS.amber }}>
+                        {activeDemo === 0 ? "I need to schedule a cleaning" : activeDemo === 1 ? "My AC is down. Emergency." : "Tell me about your services."}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "flex-start" }}>
+                      <div style={{ maxWidth: "85%", padding: "12px 16px", borderRadius: 12, background: "rgba(255,255,255,0.08)", fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.85)" }}>
+                        {activeDemo === 0 ? "Perfect. What day works?" : activeDemo === 1 ? "Sending emergency team now." : "Let me show you what we do best."}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* CTA */}
+          <section style={{ background: COLORS.heroNavy, padding: "80px clamp(20px,5vw,60px)", textAlign: "center" }}>
+            <FadeIn>
+              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 36, fontWeight: 700, color: COLORS.white, marginBottom: 16 }}>
+                Want to see your business<br/>reimagined this way?
+              </h2>
+              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, color: "rgba(255,255,255,0.8)", marginBottom: 24 }}>
+                Book your free strategy call. I'll show you what's possible for your specific business.
+              </p>
+              <Button size="lg">Book Your Free Strategy Call <ArrowRight /></Button>
+            </FadeIn>
+          </section>
+        </div>
+      );
+    }
+
+    // ══════════════════════════════════════════
+    // MAIN APP
+    // ══════════════════════════════════════════
+    function NorthsetApp() {
+      const [page, setPage] = useState("home");
+      return (
+        <div style={{ minHeight: "100vh", background: COLORS.white }}>
+          <Nav page={page} setPage={setPage} />
+          {page === "home" && <HomePage setPage={setPage} />}
+          {page === "services" && <ServicesPage />}
+          {page === "demos" && <DemosPage />}
+          <Footer />
+        </div>
+      );
+    }
+
+    // ══════════════════════════════════════════
+    // RENDER APP TO DOM
+    // ══════════════════════════════════════════
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<NorthsetApp />);
+  </script>
 
 </body>
 </html>
